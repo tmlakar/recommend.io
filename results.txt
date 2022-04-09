@@ -1,0 +1,56 @@
+       user_id  item_id  rating  timestamp
+0          196      242       3  881250949
+1          186      302       3  891717742
+2           22      377       1  878887116
+3          244       51       2  880606923
+4          166      346       1  886397596
+...        ...      ...     ...        ...
+99995      880      476       3  880175444
+99996      716      204       5  879795543
+99997      276     1090       1  874795795
+99998       13      225       2  882399156
+99999       12      203       3  879959583
+
+[100000 rows x 4 columns]
+      movie_id                                movie_title release_date  video_release_date  ... sci-fi  thriller  war  western
+0            1                           Toy Story (1995)  01-Jan-1995                 NaN  ...      0         0    0        0
+1            2                           GoldenEye (1995)  01-Jan-1995                 NaN  ...      0         1    0        0
+2            3                          Four Rooms (1995)  01-Jan-1995                 NaN  ...      0         1    0        0
+3            4                          Get Shorty (1995)  01-Jan-1995                 NaN  ...      0         0    0        0
+4            5                             Copycat (1995)  01-Jan-1995                 NaN  ...      0         1    0        0
+...        ...                                        ...          ...                 ...  ...    ...       ...  ...      ...
+1677      1678                          Mat' i syn (1997)  06-Feb-1998                 NaN  ...      0         0    0        0
+1678      1679                           B. Monkey (1998)  06-Feb-1998                 NaN  ...      0         1    0        0
+1679      1680                       Sliding Doors (1998)  01-Jan-1998                 NaN  ...      0         0    0        0
+1680      1681                        You So Crazy (1994)  01-Jan-1994                 NaN  ...      0         0    0        0
+1681      1682  Scream of Stone (Schrei aus Stein) (1991)  08-Mar-1996                 NaN  ...      0         0    0        0
+
+[1682 rows x 24 columns]
+     user_id  age gender     occupation zip_code
+0          1   24      M     technician    85711
+1          2   53      F          other    94043
+2          3   23      M         writer    32067
+3          4   24      M     technician    43537
+4          5   33      F          other    15213
+..       ...  ...    ...            ...      ...
+938      939   26      F        student    33319
+939      940   32      M  administrator    02215
+940      941   20      M        student    97229
+941      942   48      F      librarian    78209
+942      943   22      M        student    77841
+
+[943 rows x 5 columns]
+       user_id  age gender  occupation zip_code  item_id  rating               timestamp  ...  horror musical mystery romance  sci-fi  thriller  war  western
+0            1   24      M  technician    85711       61       4 1970-01-11 05:02:22.420  ...       0       0       0       0       0         0    0        0
+1            1   24      M  technician    85711      189       3 1970-01-11 07:52:12.928  ...       0       0       0       0       0         0    0        0
+2            1   24      M  technician    85711       33       4 1970-01-11 05:02:22.699  ...       0       0       0       1       0         1    0        0
+3            1   24      M  technician    85711      160       4 1970-01-11 04:04:32.547  ...       0       0       0       0       0         0    0        0
+4            1   24      M  technician    85711       20       4 1970-01-11 07:30:31.883  ...       0       0       0       1       0         0    0        0
+...        ...  ...    ...         ...      ...      ...     ...                     ...  ...     ...     ...     ...     ...     ...       ...  ...      ...
+99995      943   22      M     student    77841      415       1 1970-01-11 07:50:40.027  ...       0       0       0       0       0         0    0        1
+99996      943   22      M     student    77841      219       4 1970-01-11 07:50:39.575  ...       1       0       0       0       0         0    0        0
+99997      943   22      M     student    77841      796       3 1970-01-11 07:50:40.311  ...       0       0       0       1       0         0    0        0
+99998      943   22      M     student    77841      739       4 1970-01-11 07:50:39.929  ...       0       0       0       1       0         0    0        0
+99999      943   22      M     student    77841      391       2 1970-01-11 07:50:40.291  ...       0       0       0       0       0         0    0        0
+
+[100000 rows x 31 columns]
