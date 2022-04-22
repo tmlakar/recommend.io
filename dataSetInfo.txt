@@ -1,0 +1,10 @@
+# of Unique Users: 943
+# of items: 1682
+
+
+Max movies rated by one user: 737
+Min movies rated by one user: 20
+
+
+Gender counts male: 670
+Gender counts female: 273

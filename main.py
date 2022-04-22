@@ -9,15 +9,17 @@ from collaborative_filtering import *
 
 
 print("........................................................")
-print(" LET'S PROCESS SOME DATA")
+print(" DATA IS BEING PROCESSED ")
 print("........................................................")
-print()
-# dataProcess();
+dataProcess()
+print(" DATA IS PROCESSED ")
 
 print("........................................................")
-print(" COLLABORATIVE SYSTEM")
+print(" COLLABORATIVE SYSTEM IS STARTING ")
 print("........................................................")
-print()
-collaborativeFiltering();
+
+collaborativeFiltering()
+
+print(" DONE ")
 
 print("........................................................")

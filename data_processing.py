@@ -6,11 +6,11 @@ import numpy as np
 import warnings
 
 def dataProcess():
-    sourceFile = open('results.txt', 'w')
+    dataSetInfo = open('dataSetInfo.txt', 'w')
+
     """
     Getting the data from the movieLens 100k data set and formatting it.
     """
-
     rating_df = pd.read_csv("ml-100k/u.data", sep="\t", names=["user_id", "item_id", "rating", "timestamp"])
 
     item_df = pd.read_csv("ml-100k/u.item", sep="|", encoding="latin-1",
@@ -23,96 +23,125 @@ def dataProcess():
     user_df = pd.read_csv("ml-100k/u.user", sep="|", encoding="latin-1", names=["user_id", "age", "gender",
                                                                                 "occupation", "zip_code"])
 
-    print(rating_df, file=sourceFile)
-    print(item_df, file=sourceFile)
-    print(user_df, file=sourceFile)
+    # print(rating_df)
+    # checking if data was formatted well
+    rating_df.to_csv('data/ratingsAll.csv', sep='\t', encoding='utf-8')
 
-    # checking unique users
-    print(f"# of Unique Users: {rating_df['user_id'].nunique()}")
+    # print(item_df)
+    item_df.to_csv('data/ratingsItems.csv', sep='\t', encoding='utf-8')
 
-    # checking number of items
-    print(f"# of items: {rating_df['item_id'].nunique()}")
+    # print(user_df)
+    user_df.to_csv('data/ratingsUser.csv', sep='\t', encoding='utf-8')
+
+    """
+        Some additional information about the data set.
+    """
+
+    # number of unique users
+    print(f"# of Unique Users: {rating_df['user_id'].nunique()}", file=dataSetInfo)
+
+    # number of items
+    print(f"# of items: {rating_df['item_id'].nunique()}", file=dataSetInfo)
 
     # convert timestamp column to time stamp
     rating_df["timestamp"] = rating_df.timestamp.apply(lambda x: datetime.fromtimestamp(x / 1e3))
+    rating_df.to_csv('data/ratingsAll.csv', sep='\t', encoding='utf-8')
+    # drop date column
+    rating_df.drop("timestamp", axis=1, inplace=True)
+    rating_df.to_csv('data/ratingsAll.csv', sep='\t', encoding='utf-8')
 
-    # check if change has been applied
-    print(rating_df.info())
-    rating_df.head()
-
-    # peak at items_df
-    print(item_df.info())
-    item_df.head()
 
     # drop empty column
     item_df.drop("video_release_date", axis=1, inplace=True)
+    item_df.to_csv('data/ratingsItems.csv', sep='\t', encoding='utf-8')
 
     # convert non-null values to datetime in release_date
     item_df["release_date"] = item_df[item_df.release_date.notna()]["release_date"].apply(
         lambda x: datetime.strptime(x, "%d-%b-%Y"))
 
-    # check if change is applied
-    print(item_df.info(), item_df.shape)
-    item_df.head()
-
+    """
+        Merging all data into one data frame.
+    """
     full_df = pd.merge(user_df, rating_df, how="left", on="user_id")
     full_df = pd.merge(full_df, item_df, how="left", right_on="movie_id", left_on="item_id")
     full_df.head()
-    print(full_df, file=sourceFile)
+    full_df.to_csv('data/mergedRatings.csv', sep='\t', encoding='utf-8')
 
     """
-    Plotting some data.
+    Data visualization with some plotting.
     """
 
+    """
+        Top 10 rated movies.
+    """
     # return number of rows associated to each title
-    top_ten_movies = full_df.groupby("movie_title").size().sort_values(ascending=False)[:5]
+    top_ten_movies = full_df.groupby("movie_title").size().sort_values(ascending=False)[:10]
 
     # plot the counts
-    # plt.figure(figsize=(12, 5))
-    # plt.barh(y= top_ten_movies.index,
-    #          width= top_ten_movies.values)
-    # plt.title("10 Most Rated Movies in the Data", fontsize=16)
-    # plt.ylabel("Moive", fontsize=14)
-    # plt.xlabel("Count", fontsize=14)
+    plt.figure(figsize=(20, 5))
+    plt.barh(y= top_ten_movies.index,
+             width= top_ten_movies.values)
+    plt.title("10 Najbolj ocenjenih filmov", fontsize=16)
+    plt.ylabel("Film", fontsize=14)
+    plt.xlabel("", fontsize=14)
+    plt.savefig('visualization/top_ten_movies.png')
     # plt.show()
 
     genres = ["unknown", "action", "adventure", "animation", "childrens", "comedy", "crime",
               "documentary", "drama", "fantasy", "film_noir", "horror", "musical",
               "mystery", "romance", "sci-fi", "thriller", "war", "western"]
 
+    # e.g. Star Wars genres
     full_df[full_df.movie_title == "Star Wars (1977)"][genres].iloc[0].sort_values(ascending=False)
 
-    # the least rated movies
+    """
+        Least rated movies.
+    """
+
     least_10_movies = full_df.groupby("movie_title").size().sort_values(ascending=False)[-10:]
-    print(least_10_movies)
+    # plot the counts
+    plt.figure(figsize=(20, 5))
+    plt.barh(y=least_10_movies.index,
+             width=least_10_movies.values)
+    plt.title("10 Least Rated Movies in the Data", fontsize=16)
+    plt.ylabel("Movie", fontsize=14)
+    plt.xlabel("Count", fontsize=14)
+    plt.savefig('visualization/least_ten_movies.png')
+    # plt.show()
 
     movies_rated = rating_df.groupby("user_id").size().sort_values(ascending=False)
-    print(f"Max movies rated by one user: {max(movies_rated)}\nMin movies rated by one user: {min(movies_rated)}")
+    print("\n", file=dataSetInfo)
+    print(f"Max movies rated by one user: {max(movies_rated)}\nMin movies rated by one user: {min(movies_rated)}", file=dataSetInfo)
 
     """
-    Number of male and female raters + popular genres among genders.
+        Number of male and female raters + popular genres among genders.
     """
 
     # count the number of male and female raters
     gender_counts = user_df.gender.value_counts()
+    print("\n", file=dataSetInfo)
+    print(f"Gender counts male: {gender_counts.values[0]}\nGender counts female: {gender_counts.values[1]}", file=dataSetInfo)
+
 
     # plot the counts
     plt.figure(figsize=(12, 5))
     plt.bar(x=gender_counts.index[0], height=gender_counts.values[0], color="blue")
     plt.bar(x=gender_counts.index[1], height=gender_counts.values[1], color="orange")
-    plt.title("Number of Male and Female Participants", fontsize=16)
-    plt.xlabel("Gender", fontsize=14)
-    plt.ylabel("Counts", fontsize=14)
-    plt.show()
+    plt.title("Število moških in ženskih glasovalcev", fontsize=16)
+    plt.xlabel("Spol", fontsize=14)
+    plt.ylabel("", fontsize=14)
+    plt.savefig('visualization/ratings_by_gender.png')
+    # plt.show()
 
     full_df[genres + ["gender"]].groupby("gender").sum().T.plot(kind="barh", figsize=(12, 5), color=["orange", "blue"])
-    plt.xlabel("Counts", fontsize=14)
-    plt.ylabel("Genre", fontsize=14)
-    plt.title("Popular Genres Among Genders", fontsize=16)
-    plt.show()
+    plt.xlabel("", fontsize=14)
+    plt.ylabel("Žanri", fontsize=14)
+    plt.title("Popularnost žanrov med spoloma", fontsize=16)
+    plt.savefig('visualization/popular_genres_by_gender.png')
+    # plt.show()
 
     """
-    Genre popularity
+        Genre popularity.
     """
 
     # get the genre names in the dataframe and their counts
@@ -122,14 +151,14 @@ def dataProcess():
     # plot a bar chart
     plt.figure(figsize=(12, 5))
     plt.barh(y=label, width=label_counts)
-    plt.title("Genre Popularity", fontsize=16)
-    plt.ylabel("Genres", fontsize=14)
-    plt.xlabel("Counts", fontsize=14)
-
-    plt.show()
+    plt.title("Popularnost žanrov", fontsize=16)
+    plt.ylabel("Žanri", fontsize=14)
+    plt.xlabel("", fontsize=14)
+    plt.savefig('visualization/popular_genres.png')
+    # plt.show()
 
     """
-    Store data - occupation
+        Occupation.
     """
     # creating the index and values variables for occupation
     occ_label = user_df.occupation.value_counts().index
@@ -139,7 +168,8 @@ def dataProcess():
     plt.figure(figsize=(12, 5))
     plt.barh(y=occ_label, width=occ_label_counts)
     plt.title("Most common User Occupations", fontsize=16)
-    plt.show()
+    plt.savefig('visualization/occupations.png')
+    # plt.show()
 
     # creating a empty df to store data
     df_temp = pd.DataFrame(columns=["occupation", "avg_rating"])
@@ -151,6 +181,6 @@ def dataProcess():
 
     # sort from highest to lowest
     df_temp = df_temp.sort_values("avg_rating", ascending=False).reset_index(drop=True)
-    print(df_temp)
+    # print(df_temp)
 
-    sourceFile.close()
+    dataSetInfo.close()
