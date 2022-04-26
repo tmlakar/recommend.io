@@ -78,7 +78,7 @@ def dataProcess():
     top_ten_movies = full_df.groupby("movie_title").size().sort_values(ascending=False)[:10]
 
     # plot the counts
-    plt.figure(figsize=(20, 5))
+    plt.figure(figsize=(12, 10))
     plt.barh(y= top_ten_movies.index,
              width= top_ten_movies.values)
     plt.title("10 Najbolj ocenjenih filmov", fontsize=16)
@@ -100,7 +100,7 @@ def dataProcess():
 
     least_10_movies = full_df.groupby("movie_title").size().sort_values(ascending=False)[-10:]
     # plot the counts
-    plt.figure(figsize=(20, 5))
+    plt.figure(figsize=(10, 8))
     plt.barh(y=least_10_movies.index,
              width=least_10_movies.values)
     plt.title("10 Least Rated Movies in the Data", fontsize=16)
@@ -124,8 +124,8 @@ def dataProcess():
 
 
     # plot the counts
-    plt.figure(figsize=(12, 5))
-    plt.bar(x=gender_counts.index[0], height=gender_counts.values[0], color="blue")
+    plt.figure(figsize=(12, 6))
+    plt.bar(x=gender_counts.index[0], height=gender_counts.values[0],)
     plt.bar(x=gender_counts.index[1], height=gender_counts.values[1], color="orange")
     plt.title("Število moških in ženskih glasovalcev", fontsize=16)
     plt.xlabel("Spol", fontsize=14)
@@ -133,7 +133,7 @@ def dataProcess():
     plt.savefig('visualization/ratings_by_gender.png')
     # plt.show()
 
-    full_df[genres + ["gender"]].groupby("gender").sum().T.plot(kind="barh", figsize=(12, 5), color=["orange", "blue"])
+    full_df[genres + ["gender"]].groupby("gender").sum().T.plot(kind="barh", figsize=(12, 10), color=["orange", "#1F77B4"])
     plt.xlabel("", fontsize=14)
     plt.ylabel("Žanri", fontsize=14)
     plt.title("Popularnost žanrov med spoloma", fontsize=16)
@@ -149,7 +149,7 @@ def dataProcess():
     label_counts = item_df.loc[:, "unknown":].sum().values
 
     # plot a bar chart
-    plt.figure(figsize=(12, 5))
+    plt.figure(figsize=(12, 10))
     plt.barh(y=label, width=label_counts)
     plt.title("Popularnost žanrov", fontsize=16)
     plt.ylabel("Žanri", fontsize=14)
@@ -165,7 +165,7 @@ def dataProcess():
     occ_label_counts = user_df.occupation.value_counts().values
 
     # plot horizontal bar chart
-    plt.figure(figsize=(12, 5))
+    plt.figure(figsize=(12, 10))
     plt.barh(y=occ_label, width=occ_label_counts)
     plt.title("Most common User Occupations", fontsize=16)
     plt.savefig('visualization/occupations.png')

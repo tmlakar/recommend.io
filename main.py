@@ -11,7 +11,7 @@ from collaborative_filtering import *
 print("........................................................")
 print(" DATA IS BEING PROCESSED ")
 print("........................................................")
-dataProcess()
+# dataProcess()
 print(" DATA IS PROCESSED ")
 
 print("........................................................")
